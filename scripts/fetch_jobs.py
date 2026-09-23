@@ -43,6 +43,7 @@ def fetch_jobs_for_location(location: str, page: int = 1):
         "app_id": APP_ID,
         "app_key": APP_KEY,
         "results_per_page": RESULTS_PER_LOCATION,
+        "what": "",
         "where": location,
         "content-type": "application/json",
     }
@@ -52,7 +53,8 @@ def fetch_jobs_for_location(location: str, page: int = 1):
             data = json.loads(resp.read().decode("utf-8"))
             return data.get("results", [])
     except HTTPError as e:
-        print(f"Erro ao buscar '{location}': {e}")
+        body = e.read().decode("utf-8", errors="replace")
+        print(f"Erro ao buscar '{location}': {e} | Detalhes: {body}")
         return []
 
 
